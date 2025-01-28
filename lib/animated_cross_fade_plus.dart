@@ -1,13 +1,9 @@
 library animated_cross_fade_plus;
 
+import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-
 /// A widget that cross-fades between multiple children.
-///
-/// This widget provides an enhanced version of [AnimatedCrossFade] that supports
-/// multiple children with customizable animations and transitions.
 class AnimatedCrossFadePlus extends StatefulWidget {
   /// The list of children to display and animate between.
   final List<Widget> children;
@@ -37,7 +33,7 @@ class AnimatedCrossFadePlus extends StatefulWidget {
   final void Function(int)? onIndexChanged;
 
   const AnimatedCrossFadePlus({
-    Key? key,
+    super.key,
     required this.children,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.linear,
@@ -49,26 +45,27 @@ class AnimatedCrossFadePlus extends StatefulWidget {
     this.onIndexChanged,
   })  : assert(children.length > 0, 'Children must not be empty'),
         assert(initialIndex >= 0 && initialIndex < children.length,
-            'Initial index must be within bounds of children list'),
-        super(key: key);
+            'Initial index must be within bounds of children list');
 
   @override
-  State<AnimatedCrossFadePlus> createState() => _AnimatedCrossFadePlusState();
+  AnimatedCrossFadePlusState createState() => AnimatedCrossFadePlusState();
 }
 
-class _AnimatedCrossFadePlusState extends State<AnimatedCrossFadePlus>
+class AnimatedCrossFadePlusState extends State<AnimatedCrossFadePlus>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   late int _currentIndex;
   late int _nextIndex;
   Timer? _autoPlayTimer;
+  bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
     _nextIndex = _currentIndex;
+    _isPlaying = widget.autoPlay;
 
     _controller = AnimationController(
       duration: widget.duration,
@@ -80,8 +77,21 @@ class _AnimatedCrossFadePlusState extends State<AnimatedCrossFadePlus>
       curve: widget.curve,
     );
 
-    if (widget.autoPlay && widget.children.length > 1) {
+    if (_isPlaying && widget.children.length > 1) {
       _setupAutoPlay();
+    }
+  }
+
+  @override
+  void didUpdateWidget(AnimatedCrossFadePlus oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.autoPlay != oldWidget.autoPlay) {
+      _isPlaying = widget.autoPlay;
+      if (_isPlaying) {
+        _setupAutoPlay();
+      } else {
+        _autoPlayTimer?.cancel();
+      }
     }
   }
 
@@ -93,12 +103,47 @@ class _AnimatedCrossFadePlusState extends State<AnimatedCrossFadePlus>
     );
   }
 
+  /// Stops the auto-play animation
+  void stopAutoPlay() {
+    _autoPlayTimer?.cancel();
+    _isPlaying = false;
+  }
+
+  /// Starts the auto-play animation
+  void startAutoPlay() {
+    _isPlaying = true;
+    _setupAutoPlay();
+  }
+
+  /// Toggles the auto-play state
+  void toggleAutoPlay() {
+    if (_isPlaying) {
+      stopAutoPlay();
+    } else {
+      startAutoPlay();
+    }
+  }
+
   /// Animates to the next child in the list.
   void animateToNext() {
     if (!mounted) return;
     setState(() {
       _currentIndex = _nextIndex;
       _nextIndex = (_nextIndex + 1) % widget.children.length;
+    });
+    _controller.forward(from: 0.0).then((_) {
+      if (widget.onIndexChanged != null) {
+        widget.onIndexChanged!(_nextIndex);
+      }
+    });
+  }
+
+  /// Animates to the previous child in the list.
+  void animateToPrevious() {
+    if (!mounted) return;
+    setState(() {
+      _currentIndex = _nextIndex;
+      _nextIndex = (_nextIndex - 1 + widget.children.length) % widget.children.length;
     });
     _controller.forward(from: 0.0).then((_) {
       if (widget.onIndexChanged != null) {

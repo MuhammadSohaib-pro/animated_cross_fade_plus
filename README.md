@@ -1,18 +1,39 @@
-# animated_cross_fade_plus
+# Animated Cross Fade Plus
 
-A Flutter package that provides an enhanced version of AnimatedCrossFade with support for multiple children and customizable animations.
+A powerful Flutter package that enhances the traditional AnimatedCrossFade widget with support for multiple children, auto-play capabilities, and smooth transitions.
 
-## Features
+[![pub package](https://img.shields.io/pub/v/animated_cross_fade_plus.svg)](https://pub.dev/packages/animated_cross_fade_plus)
+[![likes](https://img.shields.io/pub/likes/animated_cross_fade_plus?style=flat-square)](https://pub.dev/packages/animated_cross_fade_plus/score)
+[![popularity](https://img.shields.io/pub/popularity/animated_cross_fade_plus?style=flat-square)](https://pub.dev/packages/animated_cross_fade_plus/score)
 
-- Support for multiple children (not just two like the original AnimatedCrossFade)
-- Customizable animation duration and curve
-- Auto-play functionality with configurable intervals
-- Manual navigation through children
-- Callback support for animation completion
-- Alignment control for children
-- Simple API similar to AnimatedCrossFade
+## Demo
 
-## Getting started
+### Auto-Play Carousel
+
+<video width="320" height="240" autoplay loop muted playsinline>
+  <source src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/auto_play_demo.webm" type="video/webm">
+  <img src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/auto_play_image.png" alt="Auto-play Demo">
+</video>
+
+### Manual Navigation
+
+<video width="320" height="240" autoplay loop muted playsinline>
+  <source src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/manual_demo.webm" type="video/webm">
+  <img src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/manual_image.png" alt="Manual Navigation Demo">
+</video>
+
+## Features 🚀
+
+- ✨ Support for unlimited children (not just two like AnimatedCrossFade)
+- 🎮 Manual navigation controls
+- 🎯 Auto-play functionality
+- 🎨 Customizable animations and durations
+- 📱 Responsive design
+- 🎭 Smooth cross-fade transitions
+- 🔄 Built-in play/pause controls
+- 📍 Progress indicators
+
+## Installation 💻
 
 Add this to your package's `pubspec.yaml` file:
 
@@ -21,66 +42,135 @@ dependencies:
   animated_cross_fade_plus: ^0.0.1
 ```
 
-## Usage
+## Usage 🎯
+
+### Basic Auto-Play Carousel
 
 ```dart
-import 'package:animated_cross_fade_plus/animated_cross_fade_plus.dart';
+class AutoPlayExample extends StatefulWidget {
+  @override
+  _AutoPlayExampleState createState() => _AutoPlayExampleState();
+}
 
-// Create a list of widgets to animate between
-final List<Widget> children = [
-  Container(color: Colors.red),
-  Container(color: Colors.blue),
-  Container(color: Colors.green),
-];
+class _AutoPlayExampleState extends State<AutoPlayExample> {
+  final List<SlideContent> _slides = [
+    SlideContent(
+      title: 'Welcome',
+      gradient: [Colors.purple, Colors.blue],
+      icon: Icons.rocket_launch,
+    ),
+    SlideContent(
+      title: 'Easy to Use',
+      gradient: [Colors.orange, Colors.red],
+      icon: Icons.touch_app,
+    ),
+  ];
 
-// Basic usage
-AnimatedCrossFadePlus(
-  children: children,
-  duration: const Duration(milliseconds: 300),
-  curve: Curves.easeInOut,
-  initialIndex: 0,
-)
-
-// Auto-playing carousel
-AnimatedCrossFadePlus(
-  children: children,
-  duration: const Duration(milliseconds: 300),
-  autoPlay: true,
-  autoPlayDuration: const Duration(seconds: 2),
-)
-
-// With manual control
-final GlobalKey<_AnimatedCrossFadePlusState> _crossFadeKey = GlobalKey();
-
-AnimatedCrossFadePlus(
-  key: _crossFadeKey,
-  children: children,
-  onIndexChanged: (index) {
-    print('Switched to index: $index');
-  },
-)
-
-// Later, you can control the animations:
-_crossFadeKey.currentState?.animateToNext(); // Go to next child
-_crossFadeKey.currentState?.animateToIndex(2); // Go to specific index
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedCrossFadePlus(
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeInOutCubic,
+      autoPlay: true,
+      autoPlayDuration: const Duration(seconds: 3),
+      children: _slides.map((slide) => _buildSlide(slide)).toList(),
+    );
+  }
+}
 ```
 
-## Parameters
+### Manual Navigation Carousel
 
-- `children`: List of widgets to animate between
-- `duration`: Duration of the cross-fade animation
-- `curve`: Curve to use for the cross-fade animation
-- `initialIndex`: Initial index of the child to display
-- `autoPlay`: Whether to automatically cycle through children
-- `autoPlayDuration`: Duration to wait between auto-play transitions
-- `alignment`: Alignment of children within the cross-fade
-- `excludeBottomFocus`: Whether to exclude the semantic boundary
-- `onIndexChanged`: Callback function when the animation completes
+```dart
+class ManualExample extends StatefulWidget {
+  @override
+  _ManualExampleState createState() => _ManualExampleState();
+}
 
-## Additional information
+class _ManualExampleState extends State<ManualExample> {
+  final GlobalKey<AnimatedCrossFadePlusState> _key = GlobalKey();
+  int _currentIndex = 0;
 
-For more examples, check out the example directory in the package repository.
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AnimatedCrossFadePlus(
+          key: _key,
+          duration: const Duration(milliseconds: 800),
+          children: _items.map((item) => _buildItem(item)).toList(),
+          onIndexChanged: (index) => setState(() => _currentIndex = index),
+        ),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () => _key.currentState?.animateToPrevious(),
+              child: Text('Previous'),
+            ),
+            ElevatedButton(
+              onPressed: () => _key.currentState?.animateToNext(),
+              child: Text('Next'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+```
 
-## Contributing
+## Parameters ⚙️
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+| Parameter        | Type              | Description                          |
+| ---------------- | ----------------- | ------------------------------------ |
+| children         | List<Widget>      | List of widgets to animate between   |
+| duration         | Duration          | Duration of the cross-fade animation |
+| curve            | Curve             | Animation curve to use               |
+| initialIndex     | int               | Starting index                       |
+| autoPlay         | bool              | Enable/disable auto-play             |
+| autoPlayDuration | Duration?         | Time between auto-play transitions   |
+| alignment        | AlignmentGeometry | Alignment of children                |
+| onIndexChanged   | Function(int)?    | Callback when index changes          |
+
+## Controller Methods 🎮
+
+```dart
+final GlobalKey<AnimatedCrossFadePlusState> _key = GlobalKey();
+
+// Navigation
+_key.currentState?.animateToNext();     // Go to next slide
+_key.currentState?.animateToPrevious(); // Go to previous slide
+_key.currentState?.animateToIndex(2);   // Go to specific index
+
+// Auto-play control
+_key.currentState?.startAutoPlay();     // Start auto-play
+_key.currentState?.stopAutoPlay();      // Stop auto-play
+_key.currentState?.toggleAutoPlay();    // Toggle auto-play state
+```
+
+## Complete Examples 📱
+
+Check out the [example](https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/blob/master/example/lib/main.dart) folder for complete implementation examples:
+
+- Auto-play carousel with gradients and icons
+- Manual navigation with image gallery
+- Progress indicators
+- Play/pause controls
+
+## Contributing 🤝
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+1. Fork it
+2. Create your feature branch (`git checkout -b feature/amazing`)
+3. Commit changes (`git commit -am 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing`)
+5. Open a Pull Request
+
+## License 📄
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Maintainers 👥
+
+- [Muhammad Sohaib](https://github.com/MuhammadSohaib-pro) - creator and maintainer
