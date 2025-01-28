@@ -10,17 +10,11 @@ A powerful Flutter package that enhances the traditional AnimatedCrossFade widge
 
 ### Auto-Play Carousel
 
-<video width="320" height="240" autoplay loop muted playsinline>
-  <source src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/auto_play_demo.webm" type="video/webm">
-  <img src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/auto_play_image.png" alt="Auto-play Demo">
-</video>
+![Auto-play Demo](https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/blob/master/example/assets/auto_play_demo.gif)
 
 ### Manual Navigation
 
-<video width="320" height="240" autoplay loop muted playsinline>
-  <source src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/manual_demo.webm" type="video/webm">
-  <img src="https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/tree/master/example/assets/manual_image.png" alt="Manual Navigation Demo">
-</video>
+![Manual Navigation Demo](https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/blob/master/example/assets/manual_demo.gif)
 
 ## Features 🚀
 
