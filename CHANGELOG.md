@@ -10,3 +10,7 @@
 ## 0.0.2
 
 * update readme file for display example demo
+
+## 0.0.3
+
+* update readme file and add youtube video demo

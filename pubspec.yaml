@@ -1,6 +1,6 @@
 name: animated_cross_fade_plus
 description: A Flutter package that provides an enhanced version of AnimatedCrossFade with support for multiple children and customizable animations.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus
 
 environment:

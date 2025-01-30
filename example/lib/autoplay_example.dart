@@ -6,7 +6,8 @@ class AutoPlayCarouselExample extends StatefulWidget {
   const AutoPlayCarouselExample({super.key});
 
   @override
-  State<AutoPlayCarouselExample> createState() => _AutoPlayCarouselExampleState();
+  State<AutoPlayCarouselExample> createState() =>
+      _AutoPlayCarouselExampleState();
 }
 
 class _AutoPlayCarouselExampleState extends State<AutoPlayCarouselExample> {

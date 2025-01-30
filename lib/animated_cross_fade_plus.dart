@@ -143,7 +143,8 @@ class AnimatedCrossFadePlusState extends State<AnimatedCrossFadePlus>
     if (!mounted) return;
     setState(() {
       _currentIndex = _nextIndex;
-      _nextIndex = (_nextIndex - 1 + widget.children.length) % widget.children.length;
+      _nextIndex =
+          (_nextIndex - 1 + widget.children.length) % widget.children.length;
     });
     _controller.forward(from: 0.0).then((_) {
       if (widget.onIndexChanged != null) {
@@ -156,7 +157,7 @@ class AnimatedCrossFadePlusState extends State<AnimatedCrossFadePlus>
   void animateToIndex(int index) {
     if (!mounted || index == _currentIndex) return;
     assert(index >= 0 && index < widget.children.length);
-    
+
     setState(() {
       _currentIndex = _nextIndex;
       _nextIndex = index;

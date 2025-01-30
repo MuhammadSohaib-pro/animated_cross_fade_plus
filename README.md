@@ -2,9 +2,7 @@
 
 A powerful Flutter package that enhances the traditional AnimatedCrossFade widget with support for multiple children, auto-play capabilities, and smooth transitions.
 
-[![pub package](https://img.shields.io/pub/v/animated_cross_fade_plus.svg)](https://pub.dev/packages/animated_cross_fade_plus)
-[![likes](https://img.shields.io/pub/likes/animated_cross_fade_plus?style=flat-square)](https://pub.dev/packages/animated_cross_fade_plus/score)
-[![popularity](https://img.shields.io/pub/popularity/animated_cross_fade_plus?style=flat-square)](https://pub.dev/packages/animated_cross_fade_plus/score)
+[![pub package](https://img.shields.io/pub/v/animated_cross_fade_plus.svg)](https://pub.dev/packages/animated_cross_fade_plus) [![github](https://img.shields.io/static/v1?label=platform&message=flutter&color=1ebbfd)](https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus) [![likes](https://img.shields.io/pub/likes/animated_cross_fade_plus?style=flat-square)](https://pub.dev/packages/animated_cross_fade_plus/score) [![license](https://img.shields.io/github/license/MuhammadSohaib-pro/animated_cross_fade_plus.svg)](https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/blob/master/LICENSE)
 
 ## Demo
 
@@ -15,6 +13,10 @@ A powerful Flutter package that enhances the traditional AnimatedCrossFade widge
 ### Manual Navigation
 
 ![Manual Navigation Demo](https://raw.githubusercontent.com/MuhammadSohaib-pro/animated_cross_fade_plus/master/example/assets/manual_demo.gif)
+
+### Youtube Video
+
+🎥 Check out the tutorial video on my YouTube channel to see it in action! [Youtube video](https://www.youtube.com/watch?v=iVYEFxbSD2w)
 
 ## Features 🚀
 
