@@ -23,9 +23,9 @@ A powerful Flutter package that enhances the traditional AnimatedCrossFade widge
 - ✨ Support for unlimited children (not just two like AnimatedCrossFade)
 - 🎮 Manual navigation controls
 - 🎯 Auto-play functionality
-- 🎨 Customizable animations and durations
-- 📱 Responsive design
-- 🎭 Smooth cross-fade transitions
+- 🎨 Multiple transition types (fade, slide, scale, slideAndFade)
+- 📱 Separate enter and exit animations
+- 🎭 Customizable transition configurations
 - 🔄 Built-in play/pause controls
 - 📍 Progress indicators
 
@@ -35,7 +35,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  animated_cross_fade_plus: ^0.0.1
+  animated_cross_fade_plus: ^0.0.4
 ```
 
 ## Usage 🎯
@@ -65,11 +65,18 @@ class _AutoPlayExampleState extends State<AutoPlayExample> {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFadePlus(
-      duration: const Duration(milliseconds: 1000),
-      curve: Curves.easeInOutCubic,
+      children: _slides.map((slide) => _buildSlide(slide)).toList(),
+      transitionType: CrossFadeTransitionType.scale,
+      enterConfig: const TransitionConfig(
+        curve: Curves.easeInOutCubic,
+        duration: Duration(milliseconds: 1000),
+      ),
+      exitConfig: const TransitionConfig(
+        curve: Curves.easeInOutCubic,
+        duration: Duration(milliseconds: 1000),
+      ),
       autoPlay: true,
       autoPlayDuration: const Duration(seconds: 3),
-      children: _slides.map((slide) => _buildSlide(slide)).toList(),
     );
   }
 }
@@ -93,18 +100,28 @@ class _ManualExampleState extends State<ManualExample> {
       children: [
         AnimatedCrossFadePlus(
           key: _key,
-          duration: const Duration(milliseconds: 800),
           children: _items.map((item) => _buildItem(item)).toList(),
+          transitionType: CrossFadeTransitionType.slideAndFade,
+          enterConfig: const TransitionConfig(
+            curve: Curves.easeInOutCubic,
+            duration: Duration(milliseconds: 800),
+            direction: AxisDirection.left,
+          ),
+          exitConfig: const TransitionConfig(
+            curve: Curves.easeInOutCubic,
+            duration: Duration(milliseconds: 800),
+            direction: AxisDirection.right,
+          ),
           onIndexChanged: (index) => setState(() => _currentIndex = index),
         ),
         Row(
           children: [
             ElevatedButton(
-              onPressed: () => _key.currentState?.animateToPrevious(),
+              onPressed: () => _key.currentState?.animateToIndex((_currentIndex - 1) % _items.length),
               child: Text('Previous'),
             ),
             ElevatedButton(
-              onPressed: () => _key.currentState?.animateToNext(),
+              onPressed: () => _key.currentState?.animateToIndex((_currentIndex + 1) % _items.length),
               child: Text('Next'),
             ),
           ],
@@ -117,16 +134,46 @@ class _ManualExampleState extends State<ManualExample> {
 
 ## Parameters ⚙️
 
-| Parameter        | Type              | Description                          |
-| ---------------- | ----------------- | ------------------------------------ |
-| children         | List<Widget>      | List of widgets to animate between   |
-| duration         | Duration          | Duration of the cross-fade animation |
-| curve            | Curve             | Animation curve to use               |
-| initialIndex     | int               | Starting index                       |
-| autoPlay         | bool              | Enable/disable auto-play             |
-| autoPlayDuration | Duration?         | Time between auto-play transitions   |
-| alignment        | AlignmentGeometry | Alignment of children                |
-| onIndexChanged   | Function(int)?    | Callback when index changes          |
+| Parameter        | Type                    | Description                                     |
+| ---------------- | ----------------------- | ----------------------------------------------- |
+| children         | List<Widget>            | List of widgets to animate between              |
+| transitionType   | CrossFadeTransitionType | Type of transition animation                    |
+| enterConfig      | TransitionConfig        | Configuration for entering widget animation     |
+| exitConfig       | TransitionConfig        | Configuration for exiting widget animation      |
+| initialIndex     | int                     | Starting index                                  |
+| autoPlay         | bool                    | Enable/disable auto-play                        |
+| autoPlayDuration | Duration?               | Time between auto-play transitions              |
+| alignment        | AlignmentGeometry       | Alignment of children                           |
+| constraints      | BoxConstraints?         | Optional size constraints                       |
+| clipChildren     | bool                    | Whether to clip children during animation       |
+| onIndexChanged   | Function(int)?          | Callback when index changes                     |
+
+## Transition Types 🎭
+
+```dart
+enum CrossFadeTransitionType {
+  fade,           // Simple fade transition
+  slide,          // Slide animation
+  scale,          // Scale animation
+  slideAndFade,   // Combined slide and fade
+}
+```
+
+## TransitionConfig Properties 🛠️
+
+```dart
+class TransitionConfig {
+  final Curve curve;              // Animation curve
+  final Duration duration;        // Animation duration
+  final AxisDirection direction;  // Slide direction (for slide transitions)
+
+  const TransitionConfig({
+    this.curve = Curves.linear,
+    this.duration = const Duration(milliseconds: 300),
+    this.direction = AxisDirection.right,
+  });
+}
+```
 
 ## Controller Methods 🎮
 
@@ -134,22 +181,18 @@ class _ManualExampleState extends State<ManualExample> {
 final GlobalKey<AnimatedCrossFadePlusState> _key = GlobalKey();
 
 // Navigation
-_key.currentState?.animateToNext();     // Go to next slide
-_key.currentState?.animateToPrevious(); // Go to previous slide
-_key.currentState?.animateToIndex(2);   // Go to specific index
+_key.currentState?.animateToIndex(2);   // Navigate to specific index
 
-// Auto-play control
-_key.currentState?.startAutoPlay();     // Start auto-play
-_key.currentState?.stopAutoPlay();      // Stop auto-play
-_key.currentState?.toggleAutoPlay();    // Toggle auto-play state
+// Auto-play control is handled through the autoPlay property
+// Toggle by updating the widget's autoPlay value
 ```
 
 ## Complete Examples 📱
 
 Check out the [example](https://github.com/MuhammadSohaib-pro/animated_cross_fade_plus/blob/master/example/lib/main.dart) folder for complete implementation examples:
 
-- Auto-play carousel with gradients and icons
-- Manual navigation with image gallery
+- Auto-play carousel with scale transitions
+- Manual navigation with slide and fade transitions
 - Progress indicators
 - Play/pause controls
 

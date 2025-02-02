@@ -1,4 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:animated_cross_fade_plus/animated_cross_fade_plus.dart';
 
@@ -13,7 +12,7 @@ class AutoPlayCarouselExample extends StatefulWidget {
 class _AutoPlayCarouselExampleState extends State<AutoPlayCarouselExample> {
   int _currentIndex = 0;
   bool _isPlaying = true;
-  final GlobalKey<AnimatedCrossFadePlusState> _crossFadeKey = GlobalKey();
+  late final GlobalKey<AnimatedCrossFadePlusState> _crossFadeKey;
 
   final List<SlideContent> _slides = [
     SlideContent(
@@ -43,6 +42,18 @@ class _AutoPlayCarouselExampleState extends State<AutoPlayCarouselExample> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _crossFadeKey = GlobalKey<AnimatedCrossFadePlusState>();
+    // Ensure initial animation state
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _currentIndex = 0;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -53,11 +64,6 @@ class _AutoPlayCarouselExampleState extends State<AutoPlayCarouselExample> {
             onPressed: () {
               setState(() {
                 _isPlaying = !_isPlaying;
-                if (_isPlaying) {
-                  _crossFadeKey.currentState?.startAutoPlay();
-                } else {
-                  _crossFadeKey.currentState?.stopAutoPlay();
-                }
               });
             },
           ),
@@ -68,11 +74,18 @@ class _AutoPlayCarouselExampleState extends State<AutoPlayCarouselExample> {
           Expanded(
             child: AnimatedCrossFadePlus(
               key: _crossFadeKey,
-              duration: const Duration(milliseconds: 1000),
-              curve: Curves.easeInOutCubic,
+              transitionType: CrossFadeTransitionType.scale,
+              enterConfig: const TransitionConfig(
+                curve: Curves.easeInOutCubic,
+                duration: Duration(milliseconds: 1000),
+              ),
+              exitConfig: const TransitionConfig(
+                curve: Curves.easeInOutCubic,
+                duration: Duration(milliseconds: 1000),
+              ),
               initialIndex: _currentIndex,
               autoPlay: _isPlaying,
-              autoPlayDuration: const Duration(seconds: 3),
+              autoPlayDuration: const Duration(seconds: 2),
               onIndexChanged: (index) {
                 setState(() {
                   _currentIndex = index;
@@ -89,6 +102,8 @@ class _AutoPlayCarouselExampleState extends State<AutoPlayCarouselExample> {
 
   Widget _buildSlide(SlideContent slide) {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.7,
+      width: MediaQuery.of(context).size.width * 0.7,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,

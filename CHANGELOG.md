@@ -1,3 +1,24 @@
+# Changelog
+
+## 0.0.4
+
+* Added multiple transition types (fade, slide, scale, slideAndFade)
+* Introduced separate enter and exit configurations
+* Added TransitionConfig model for better animation control
+* New transition direction control for slide animations
+* Added size constraints and clipping options
+* Improved autoplay handling
+* Updated examples with new transition types
+* Note: This version includes API changes from previous versions
+
+## 0.0.3
+
+* Updated readme file and added YouTube video demo
+
+## 0.0.2
+
+* Updated readme file to display example demo
+
 ## 0.0.1
 
 * Initial release
@@ -6,11 +27,3 @@
 * Manual navigation controls
 * Customizable animation duration and curve
 * Callback support for animation completion
-
-## 0.0.2
-
-* update readme file for display example demo
-
-## 0.0.3
-
-* update readme file and add youtube video demo

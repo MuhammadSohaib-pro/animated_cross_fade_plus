@@ -1,4 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:animated_cross_fade_plus/animated_cross_fade_plus.dart';
 
@@ -10,7 +9,7 @@ class ManualCarouselExample extends StatefulWidget {
 }
 
 class _ManualCarouselExampleState extends State<ManualCarouselExample> {
-  final GlobalKey<AnimatedCrossFadePlusState> _crossFadeKey = GlobalKey();
+  late final GlobalKey<AnimatedCrossFadePlusState> _crossFadeKey;
   int _currentIndex = 0;
 
   // Sample items for the carousel
@@ -20,16 +19,26 @@ class _ManualCarouselExampleState extends State<ManualCarouselExample> {
     'https://media.istockphoto.com/id/1205214235/photo/path-through-sunlit-forest.jpg?s=612x612&w=0&k=20&c=-AS1aTz85kcZ2X7E8n2iFlm6dsdIMyWGWrSDQ1o-f_0=',
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _crossFadeKey = GlobalKey<AnimatedCrossFadePlusState>();
+    // Ensure initial animation state
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _currentIndex = 0;
+      });
+    });
+  }
+
   void _handlePrevious() {
-    if (_currentIndex > 0) {
-      _crossFadeKey.currentState?.animateToPrevious();
-    }
+    final nextIndex = (_currentIndex - 1) % _items.length;
+    _crossFadeKey.currentState?.animateToIndex(nextIndex);
   }
 
   void _handleNext() {
-    if (_currentIndex < _items.length - 1) {
-      _crossFadeKey.currentState?.animateToNext();
-    }
+    final nextIndex = (_currentIndex + 1) % _items.length;
+    _crossFadeKey.currentState?.animateToIndex(nextIndex);
   }
 
   @override
@@ -43,8 +52,17 @@ class _ManualCarouselExampleState extends State<ManualCarouselExample> {
           Expanded(
             child: AnimatedCrossFadePlus(
               key: _crossFadeKey,
-              duration: const Duration(milliseconds: 800),
-              curve: Curves.easeInOutCubic,
+              transitionType: CrossFadeTransitionType.slideAndFade,
+              enterConfig: const TransitionConfig(
+                curve: Curves.easeInOutCubic,
+                duration: Duration(milliseconds: 800),
+                direction: AxisDirection.left,
+              ),
+              exitConfig: const TransitionConfig(
+                curve: Curves.easeInOutCubic,
+                duration: Duration(milliseconds: 800),
+                direction: AxisDirection.right,
+              ),
               initialIndex: _currentIndex,
               onIndexChanged: (index) {
                 setState(() {
@@ -63,7 +81,7 @@ class _ManualCarouselExampleState extends State<ManualCarouselExample> {
   Widget _buildCarouselItem(String url) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 0.7,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: DecorationImage(
@@ -85,13 +103,12 @@ class _ManualCarouselExampleState extends State<ManualCarouselExample> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: _currentIndex > 0 ? _handlePrevious : null,
+                onPressed: _handlePrevious,
                 child: const Text('Previous'),
               ),
               const SizedBox(width: 16),
               ElevatedButton(
-                onPressed:
-                    _currentIndex < _items.length - 1 ? _handleNext : null,
+                onPressed: _handleNext,
                 child: const Text('Next'),
               ),
             ],
